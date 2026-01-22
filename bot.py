@@ -99,6 +99,30 @@ async def daily_check():
         await channel.send(embed=embed)
         await asyncio.sleep(1)  # aby Discord nebyl spamován
 
+@bot.command()
+async def free(ctx):
+    epic_games = get_epic_free()
+    steam_games = get_steam_free()
+    all_games = epic_games + steam_games
+
+    if not all_games:
+        await ctx.send("Teď nejsou žádné hry zdarma.")
+        return
+
+    for game in all_games:
+        embed = discord.Embed(
+            title=game["title"],
+            url=game["link"],
+            color=0x00ff00,
+            timestamp=datetime.now(timezone.utc)
+        )
+        embed.add_field(name="Obchod", value=game["store"], inline=True)
+        embed.add_field(name="Cena", value="ZDARMA 🎁", inline=True)
+        if game["image"]:
+            embed.set_image(url=game["image"])
+        await ctx.send(embed=embed)
+        await asyncio.sleep(1)
+
 @bot.event
 async def on_ready():
     print(f"Přihlášen jako {bot.user}")
@@ -106,5 +130,6 @@ async def on_ready():
         daily_check.start()
 
 bot.run(TOKEN)
+
 
 
