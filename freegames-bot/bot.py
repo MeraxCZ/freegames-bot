@@ -3,9 +3,10 @@ from discord.ext import commands, tasks
 import requests
 from datetime import datetime, timezone
 import asyncio
+import os
 
-TOKEN = MTQ2MzgyMTY4MjAwNjQyOTY5Ng.Gz_cMv.nexyWB2fBKM6U7-L1EGtV65t09yyevLeh6J-f8
-CHANNEL_ID = 1463811139946414163
+TOKEN = os.getenv("DISCORD_TOKEN")
+CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
 
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
@@ -105,4 +106,5 @@ async def on_ready():
         daily_check.start()
 
 bot.run(TOKEN)
+
 
