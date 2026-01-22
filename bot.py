@@ -40,8 +40,17 @@ def get_epic_free():
 # ---------- STEAM ----------
 def get_steam_free():
     url = "https://www.reddit.com/r/FreeGamesOnSteam/new.json?limit=5"
-    headers = {"User-Agent": "Mozilla/5.0"}
-    data = requests.get(url, headers=headers).json()
+    headers = {"User-Agent": "FreeGamesDiscordBot/1.0"}
+
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        if r.status_code != 200:
+            return []
+
+        data = r.json()
+    except Exception:
+        return []
+
     games = []
 
     for post in data["data"]["children"]:
@@ -130,6 +139,7 @@ async def on_ready():
         daily_check.start()
 
 bot.run(TOKEN)
+
 
 
 
